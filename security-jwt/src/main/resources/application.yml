@@ -7,6 +7,26 @@ spring:
     password: 123456
     url: jdbc:mysql://192.168.128.101:3306/boot2020?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=true
     driver-class-name: com.mysql.cj.jdbc.Driver
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: 889750e604367f8c739d
+            client-secret: d8e56898a435dc8974e57896b9f36e825a747c0e
+            redirect-uri: http://127.0.0.1:8081/auth/github/callback
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
 
 mybatis:
   mapper-locations: classpath*:/mapper/**/*.xml
+
+#JWT存储的请求头
+jwt:
+  tokenHeader: Authorization
+  #JWT加解密使用的密钥
+  secret: secret
+  #JWT的超期限时间(1000*60*60*24*7)
+  expiration: 604800000
+  #JWT负载中拿到开头
+  tokenHead: 'Bearer '
