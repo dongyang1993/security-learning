@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.jwt.dao.SysRoleDao">
+
+    <resultMap id="BaseResultMap" type="com.example.jwt.entity.SysRole">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="code" column="code" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,code,
+        create_time,update_time
+    </sql>
+
+    <select id="listByUsername" resultMap="BaseResultMap">
+        select t1.* from t_sys_role t1
+            inner join t_sys_user_role t2 on t1.id = t2.role_id
+            inner join t_sys_user t3 on t3.id = t2.user_id
+        where t3.username = #{username}
+    </select>
+
+    <select id="listCodeByUsername" resultMap="BaseResultMap">
+        select t1.code from t_sys_role t1
+                          inner join t_sys_user_role t2 on t1.id = t2.role_id
+                          inner join t_sys_user t3 on t3.id = t2.user_id
+        where t3.username = #{username}
+    </select>
+</mapper>

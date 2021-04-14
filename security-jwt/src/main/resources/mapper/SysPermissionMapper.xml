@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.jwt.dao.SysPermissionDao">
+
+    <resultMap id="BaseResultMap" type="com.example.jwt.entity.SysPermission">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="tag" column="tag" jdbcType="VARCHAR"/>
+        <result property="path" column="path" jdbcType="VARCHAR"/>
+        <result property="method" column="method" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,tag,
+        path,method,create_time,
+        update_time
+    </sql>
+
+    <select id="listBySysUsername" resultMap="BaseResultMap">
+        select *
+        from t_sys_permission t1
+                 inner join t_sys_role_permission t2 on t1.id = t2.permission_id
+                 inner join t_sys_user_role t3 on t3.role_id = t2.role_id
+                 inner join t_sys_user t4
+        where username = #{username}
+    </select>
+    <select id="listPathBySysUsername" resultMap="BaseResultMap">
+        select t1.path
+        from t_sys_permission t1
+                 inner join t_sys_role_permission t2 on t1.id = t2.permission_id
+                 inner join t_sys_user_role t3 on t3.role_id = t2.role_id
+                 inner join t_sys_user t4
+        where username = #{username}
+    </select>
+</mapper>
