@@ -12,11 +12,6 @@
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,name,code,
-        create_time,update_time
-    </sql>
-
     <select id="listByUsername" resultMap="BaseResultMap">
         select t1.* from t_sys_role t1
             inner join t_sys_user_role t2 on t1.id = t2.role_id
@@ -24,7 +19,7 @@
         where t3.username = #{username}
     </select>
 
-    <select id="listCodeByUsername" resultMap="BaseResultMap">
+    <select id="listCodeByUsername" resultType="string">
         select t1.code from t_sys_role t1
                           inner join t_sys_user_role t2 on t1.id = t2.role_id
                           inner join t_sys_user t3 on t3.id = t2.user_id

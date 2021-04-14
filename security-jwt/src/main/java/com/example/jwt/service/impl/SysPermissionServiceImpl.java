@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -22,6 +23,6 @@ public class SysPermissionServiceImpl implements SysPermissionService {
 
     @Override
     public List<String> listPathBySysUsername(String username) {
-        return null;
+        return sysPermissionDao.listPathBySysUsername(username);
     }
 }

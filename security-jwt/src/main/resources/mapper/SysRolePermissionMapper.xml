@@ -12,8 +12,4 @@
             <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,role_id,permission_id,
-        create_time,update_time
-    </sql>
 </mapper>
