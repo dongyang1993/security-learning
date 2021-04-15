@@ -1,9 +1,8 @@
 package com.example.jwt.controller;
 
 import com.example.jwt.api.Rs;
-import com.example.jwt.util.JacksonUtil;
 import com.example.jwt.util.OkHttpUtil;
-import com.fasterxml.jackson.core.type.TypeReference;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RequestMapping("/auth")
 @Controller
 public class IndexController {
@@ -48,19 +48,25 @@ public class IndexController {
 
     @GetMapping("/github/callback")
     @ResponseBody
-    public void githubOauth2(@RequestParam("code") String code) throws IOException {
-        Map<String, String> map = new HashMap<>();
-        map.put("client_id", clientId);
-        map.put("client_secret", clientSecret);
-        map.put("code", code);
-        String resp = OkHttpUtil.postForm(tokenUri, map);
-        System.out.println(resp);
+    public Rs<String> githubOauth2(@RequestParam("code") String code) {
+        try {
+            Map<String, String> map = new HashMap<>();
+            map.put("client_id", clientId);
+            map.put("client_secret", clientSecret);
+            map.put("code", code);
+            String resp = OkHttpUtil.postForm(tokenUri, map);
+            System.out.println(resp);
+            return Rs.ok(resp);
+        } catch (IOException e) {
+            log.error("", e);
+            return Rs.failed();
+        }
     }
 
     @GetMapping("/github/user")
     @ResponseBody
-    public Rs<?> user(@RequestParam("token") String token) throws IOException {
-        String res = OkHttpUtil.get("https://api.github.com/user", token);
+    public Rs<?> user(@RequestParam("token") String token, @RequestParam("token_type") String tokenType) throws IOException {
+        String res = OkHttpUtil.get("https://api.github.com/user", tokenType + " " + token);
         return Rs.ok(res);
     }
 }

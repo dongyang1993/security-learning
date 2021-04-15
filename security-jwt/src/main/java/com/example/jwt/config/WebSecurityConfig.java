@@ -39,18 +39,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        /**
+         * DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+         * provider.setUserDetailsService(userDetailsService);
+         * provider.setHideUserNotFoundExceptions(false);
+         * provider.setPasswordEncoder(passwordEncoder());
+         * auth.authenticationProvider(provider);
+         * 这种和下面用的功能基本上是一样的，不过可以对内部的配置进行一些修改
+         */
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().mvcMatchers("/auth/**/*");
+        web.ignoring().mvcMatchers("/auth/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/auth/**/*").permitAll()
+                .mvcMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated();
         http.addFilter(new JwtAuthenticationFilter(this.authenticationManager()))
                 .addFilter(new JwtAuthorizationFilter(this.authenticationManager(), this.userDetailsService, tokenHeader, tokenHead, secret));

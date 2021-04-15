@@ -37,9 +37,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        UsernamePasswordAuthenticationToken authenticationToken = this.getAuthenticationToken(request);
-        if (authenticationToken != null) {
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        boolean authenticated = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+        if (!authenticated) {
+            UsernamePasswordAuthenticationToken authenticationToken = this.getAuthenticationToken(request);
+            if (authenticationToken != null) {
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
         }
         chain.doFilter(request, response);
     }
